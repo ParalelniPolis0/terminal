@@ -1,5 +1,6 @@
 <script>
     import { Xterm, XtermAddon } from "@battlefieldduck/xterm-svelte";
+    import { commands } from "$lib/commands.js";
     import "../app.css";
 
     let term;
@@ -14,14 +15,6 @@
    \\ \\_\\   \\ \\_\\         
     \\/_/    \\/_/         \x1b[0m`;
 
-    const commands = {
-        help: {
-            f: (input) => {
-                term.writeln(`there is no help yet`);
-            },
-        },
-    };
-
     let options = {
         fontFamily: "Departure Mono",
         //fontFamily: '"Cascadia Code", Menlo, monospace',
@@ -31,9 +24,10 @@
     async function onLoad() {
         console.log("Child component has loaded");
 
+        term.commands = commands;
         term.prompt = () => {
             command = "";
-            term.write("\r\n\x1b[33manon\x1b[0m@pp0 ~> ");
+            term.write("\x1b[33manon\x1b[0m@pp0# ");
         };
         term.focus();
 
@@ -43,7 +37,7 @@
         fitAddon.fit();
 
         term.writeln(logo.split("\n").join("\r\n") + "\n");
-        term.writeln("pp0-terminal v0.01 (2024-11-18)");
+        term.writeln("pp0-terminal v0.01 (2024-11-18)\r\n");
         term.prompt();
     }
 
@@ -83,13 +77,19 @@
         if (command.length > 0) {
             term.writeln("");
             if (command in commands) {
-                await commands[command].f();
+                await commands[command].f(
+                    { term },
+                    text.trim().split(" ")[1]?.split(" "),
+                );
                 term.prompt();
                 return;
             }
             term.writeln(`${command}: command not found`);
+            term.prompt();
+        } else {
+            term.write("\r\n");
+            term.prompt();
         }
-        term.prompt();
     }
 </script>
 
