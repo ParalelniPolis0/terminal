@@ -4,7 +4,7 @@
 
     let term;
     let command = "";
-    const logo = `                  __     
+    const logo = `\x1b[33m                  __     
                 /'__\`\\   
  _____   _____ /\\ \\/\\ \\  
 /\\ '__\`\\/\\ '__\`\\ \\ \\ \\ \\
@@ -12,12 +12,12 @@
  \\ \\ ,__/\\ \\ ,__/\\ \\____/
   \\ \\ \\/  \\ \\ \\/  \\/___/ 
    \\ \\_\\   \\ \\_\\         
-    \\/_/    \\/_/         `;
+    \\/_/    \\/_/         \x1b[0m`;
 
     const commands = {
         help: {
             f: (input) => {
-                term.writeln(`hey ${input}`);
+                term.writeln(`there is no help yet`);
             },
         },
     };
@@ -33,17 +33,17 @@
 
         term.prompt = () => {
             command = "";
-            term.write("\r\nanon@pp0# ");
+            term.write("\r\n\x1b[33manon\x1b[0m@pp0 ~> ");
         };
         term.focus();
 
         // FitAddon Usage
-        //const fitAddon = new (await XtermAddon.FitAddon()).FitAddon();
-        //terminal.loadAddon(fitAddon);
-        //fitAddon.fit();
+        const fitAddon = new (await XtermAddon.FitAddon()).default.FitAddon();
+        term.loadAddon(fitAddon);
+        fitAddon.fit();
 
         term.writeln(logo.split("\n").join("\r\n") + "\n");
-        term.writeln("Welcome to pp0-terminal!");
+        term.writeln("pp0-terminal v0.01 (2024-11-18)");
         term.prompt();
     }
 
@@ -98,5 +98,5 @@
     {options}
     {onLoad}
     {onData}
-    style="width:100%; height: 100%;"
+    style="width: 99vw; height: 98vh;"
 />
